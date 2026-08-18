@@ -164,7 +164,6 @@ UNITY_INSTANCING_BUFFER_START(Props)
         UNITY_DEFINE_INSTANCED_PROP(uint, _NineUniverseMode)
         UNITY_DEFINE_INSTANCED_PROP(uint, _EnableDMX)
         UNITY_DEFINE_INSTANCED_PROP(uint, _EnableFineChannels)
-        UNITY_DEFINE_INSTANCED_PROP(uint, _LegacyGoboRange)
     #endif
     #ifdef VRSL_AUDIOLINK
         UNITY_DEFINE_INSTANCED_PROP(half, _EnableAudioLink)

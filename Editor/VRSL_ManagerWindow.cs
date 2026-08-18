@@ -93,7 +93,6 @@ public class DMXListItem
     private int Z_fixtureID; public int P_fixtureID;
     private int Z_dmxChannel; public int P_dmxChannel;
     private int Z_dmxUniverse; public int P_dmxUniverse;
-    private bool Z_legacyGoboRange; public bool P_legacyGoboRange;
     private float Z_globalIntensity; public float P_globalIntensity;
     private float Z_finalIntensity; public float P_finalIntensity;
     private bool Z_finalIntensityComponentMode; public bool P_finalIntensityComponentMode;
@@ -126,7 +125,6 @@ public class DMXListItem
         Z_fixtureID = P_fixtureID = this.light.fixtureID;
         Z_dmxChannel = P_dmxChannel = this.light.dmxChannel;
         Z_dmxUniverse = P_dmxUniverse = this.light.dmxUniverse;
-        Z_legacyGoboRange = P_legacyGoboRange = this.light.legacyGoboRange;
         Z_globalIntensity = P_globalIntensity = this.light.globalIntensity;
         Z_finalIntensity = P_finalIntensity = this.light.finalIntensity;
         Z_finalIntensityComponentMode = P_finalIntensityComponentMode = this.light.finalIntensityComponentMode;
@@ -172,7 +170,6 @@ public class DMXListItem
         light.fixtureID = P_fixtureID = Z_fixtureID;
         light.dmxChannel = P_dmxChannel = Z_dmxChannel;
         light.dmxUniverse = P_dmxUniverse = Z_dmxUniverse;
-        light.legacyGoboRange = P_legacyGoboRange = Z_legacyGoboRange;
         light.globalIntensity = P_globalIntensity = Z_globalIntensity;
         light.finalIntensity = P_finalIntensity = Z_finalIntensity;
         light.finalIntensityComponentMode = P_finalIntensityComponentMode = Z_finalIntensityComponentMode;
@@ -209,7 +206,6 @@ public class DMXListItem
         so.FindProperty("fixtureID").intValue = P_fixtureID;
         so.FindProperty("dmxChannel").intValue = P_dmxChannel;
         so.FindProperty("dmxUniverse").intValue = P_dmxUniverse;
-        so.FindProperty("legacyGoboRange").boolValue = P_legacyGoboRange;
         so.FindProperty("globalIntensity").floatValue = P_globalIntensity;
         so.FindProperty("finalIntensity").floatValue = P_finalIntensity;
         so.FindProperty("finalIntensityComponentMode").boolValue = P_finalIntensityComponentMode;
@@ -241,7 +237,6 @@ public class DMXListItem
         light.fixtureID = Z_fixtureID = P_fixtureID;
         light.dmxChannel = Z_dmxChannel = P_dmxChannel;
         light.dmxUniverse = Z_dmxUniverse = P_dmxUniverse;
-        light.legacyGoboRange = Z_legacyGoboRange = P_legacyGoboRange;
         light.globalIntensity = Z_globalIntensity = P_globalIntensity;
         light.finalIntensity = Z_finalIntensity = P_finalIntensity;
         light.finalIntensityComponentMode = Z_finalIntensityComponentMode = P_finalIntensityComponentMode;
@@ -2066,7 +2061,6 @@ public class VRSL_ManagerWindow : EditorWindow {
         copyTofixture.P_invertPan = copyFromfixture.P_invertPan;
         copyTofixture.P_invertTilt = copyFromfixture.P_invertTilt;
         copyTofixture.P_isUpsideDown = copyFromfixture.P_isUpsideDown;
-        copyTofixture.P_legacyGoboRange = copyFromfixture.P_legacyGoboRange;
         copyTofixture.P_lightColorTint = copyFromfixture.P_lightColorTint;
         copyTofixture.P_maxConeLength = copyFromfixture.P_maxConeLength;
         copyTofixture.P_maxMinPan = copyFromfixture.P_maxMinPan;
@@ -3714,7 +3708,6 @@ public class VRSL_ManagerWindow : EditorWindow {
                                 if(isLUTBeamFixture)
                                 {
                                     fixture.P_enableDMXChannels = true;
-                                    fixture.P_legacyGoboRange = false;
                                     fixture.P_finalIntensityComponentMode = true;
                                 }
                                 else
@@ -3726,10 +3719,6 @@ public class VRSL_ManagerWindow : EditorWindow {
                                 fixture.P_fixtureID = EditorGUILayout.IntField("Fixture ID", fixture.P_fixtureID, GUILayout.MaxWidth(sectionWidth - 10));
                                 fixture.P_dmxChannel = EditorGUILayout.IntSlider("DMX Channel",fixture.P_dmxChannel, 1, 512, GUILayout.MaxWidth(sectionWidth - 10));
                                 fixture.P_dmxUniverse = EditorGUILayout.IntSlider("Universe",fixture.P_dmxUniverse, 1, 9, GUILayout.MaxWidth(sectionWidth - 10));
-                                if(!isLUTBeamFixture)
-                                {
-                                    fixture.P_legacyGoboRange = EditorGUILayout.Toggle("Legacy Gobo Range",fixture.P_legacyGoboRange);
-                                }
                                 GUILayout.Space(4.0f);
 
                                 GUILayout.Space(4.0f);

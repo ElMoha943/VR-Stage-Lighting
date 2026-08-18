@@ -243,13 +243,7 @@ half GetStrobeOutputFiveCH(uint DMXChannel)
 }
 half getDMXGoboSelection(uint DMXChannel)
 {
-    half goboSelect = 30.0;
-
-    #if defined(PROJECTION_MOVER) || defined (VOLUMETRIC_YES) 
-        goboSelect = IF(UNITY_ACCESS_INSTANCED_PROP(Props, _LegacyGoboRange) > 0, 42.5, goboSelect);
-    #endif
-
-    uint value = round(((getValueAtCoords(DMXChannel + 11, _Udon_DMXGridRenderTexture))*255)/goboSelect);
+    uint value = round(((getValueAtCoords(DMXChannel + 11, _Udon_DMXGridRenderTexture))*255)/30.0);
     value = isDMX() > 0.0 ? value : instancedGOBOSelection();
     return clamp(value, 1, 8) -0.1;
 }

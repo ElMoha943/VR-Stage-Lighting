@@ -155,7 +155,6 @@ Material:
     - _IntensityCutoff: 0.2
     - _IsEven: 0
     - _LMStrength: 1
-    - _LegacyGoboRange: 0
     - _LensMaxBrightness: 5
     - _LightProbeMethod: 0
     - _MaxMinPanAngle: 90

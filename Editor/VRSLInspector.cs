@@ -189,7 +189,6 @@ public class VRSLInspector : ShaderGUI
     MaterialProperty _ProjectionRange = null;
     MaterialProperty _ProjectionRangeOrigin = null;
     MaterialProperty _EnableSpin = null;
-    MaterialProperty _LegacyGoboRange = null;
     //MaterialProperty _BlendSrc = null;
     MaterialProperty _BlendDst = null;
    // MaterialProperty _BlendOp = null;
@@ -526,7 +525,6 @@ public class VRSLInspector : ShaderGUI
                     default:
                         break;
                 }
-                //matEditor.ShaderProperty(_LegacyGoboRange, new GUIContent("Enable Legacy Gobo Range", "Use Only the first 6 gobos instead of all. This is for legacy content where only 6 gobos were originally supported and the channel range was different."));
                 EditorGUI.indentLevel--;   
                 VRSLStyles.PartingLine();
                 EditorGUILayout.HelpBox("These are the render texture grids used to read DMX signals from a video panel.", MessageType.None,true);
@@ -675,7 +673,6 @@ public class VRSLInspector : ShaderGUI
                         break;
                 }
             }
-            //matEditor.ShaderProperty(_LegacyGoboRange, new GUIContent("Enable Legacy Gobo Range", "Use Only the first 6 gobos instead of all. This is for legacy content where only 6 gobos were originally supported and the channel range was different."));
             EditorGUI.indentLevel--;   
             VRSLStyles.PartingLine();
             EditorGUILayout.HelpBox("These are the render texture grids used to read DMX signals from a video panel.", MessageType.None,true);
@@ -770,7 +767,6 @@ public class VRSLInspector : ShaderGUI
                 {
                     target.DisableKeyword("_CHANNEL_MODE");
                 }
-                //matEditor.ShaderProperty(_LegacyGoboRange, new GUIContent("Enable Legacy Gobo Range", "Use Only the first 6 gobos instead of all. This is for legacy content where only 6 gobos were originally supported and the channel range was different."));
                 EditorGUI.indentLevel--;   
                 VRSLStyles.PartingLine();
                 EditorGUILayout.HelpBox("These are the render texture grids used to read DMX signals from a video panel.", MessageType.None,true);
@@ -1078,7 +1074,6 @@ public class VRSLInspector : ShaderGUI
                 EditorGUILayout.HelpBox("These are the render texture grids used to read DMX signals from a video panel.", MessageType.None,true);
                 EditorGUI.indentLevel++;
                 matEditor.ShaderProperty(_UseRawGrid, new GUIContent("Use Seperate Grid for Light Intensity and Color", "Use this to switch to the normal grid for light/color if smooothed is too slow"));
-                matEditor.ShaderProperty(_LegacyGoboRange, new GUIContent("Enable Legacy Gobo Range", "Use Only the first 6 gobos instead of all. This is for legacy content where only 6 gobos were originally supported and the channel range was different."));
                 // matEditor.TexturePropertySingleLine(new GUIContent("DMX Grid", "The DMX Render Texture to read from for color and intensity. Slightly smoothed."),_Udon_DMXGridRenderTexture);
                 // matEditor.TexturePropertySingleLine(new GUIContent("DMX Grid Smoothed", "DMX Render Texture smoothed out heavily by a custom render texture. Used for movement."),_Udon_DMXGridRenderTextureMovement);
                 // matEditor.TexturePropertySingleLine(new GUIContent("DMX Strobe Timer", "DMX Grid with strobe timings embedded."),_Udon_DMXGridStrobeTimer);

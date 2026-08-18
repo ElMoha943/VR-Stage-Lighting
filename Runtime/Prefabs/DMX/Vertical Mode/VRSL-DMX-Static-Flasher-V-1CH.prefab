@@ -113,7 +113,6 @@ MonoBehaviour:
   dmxChannel: 1
   dmxUniverse: 1
   nineUniverseMode: 0
-  legacyGoboRange: 0
   globalIntensity: 1
   finalIntensity: 1
   lightColorTint: {r: 2, g: 2, b: 2, a: 2}

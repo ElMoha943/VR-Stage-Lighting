@@ -173,7 +173,6 @@ Material:
     - _IntensityCutoff: 0
     - _IsEven: 0
     - _LMStrength: 1
-    - _LegacyGoboRange: 0
     - _LensMaxBrightness: 60
     - _LightProbeMethod: 0
     - _MAGIC_NOISE_ON: 1

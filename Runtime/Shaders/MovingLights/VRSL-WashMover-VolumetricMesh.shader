@@ -17,7 +17,6 @@ Shader "VRSL/Wash Mover/Volumetric"
 		 [HideInInspector]_ProjectionSelection ("GOBO Selection", Range(0,6)) = 0
 		 [HideInInspector]_StrobeFreq("Strobe Frequency", Range(0,25)) = 1
 		 [HideInInspector][Toggle] _EnableSpin("Enable Auto Spinning", Float) = 0
-		 [Toggle] _LegacyGoboRange ("Enable Legacy GOBO Range", Int) = 0
 		 _BlindingStrength("Blinding Strength", Range(0,1)) = 1
 
 		//[Header (BASIC CONTROLS)]

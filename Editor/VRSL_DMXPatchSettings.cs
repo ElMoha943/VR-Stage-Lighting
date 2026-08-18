@@ -142,7 +142,6 @@ namespace VRSL.EditorScripts
                 enableDMXChannels = fixture.enableDMXChannels;
                 nineUniverseMode = fixture.nineUniverseMode;
                 fixtureID = fixture.fixtureID;
-                legacyGoboRange = fixture.legacyGoboRange;
                 globalIntensity = fixture.globalIntensity;
                 finalIntensity = fixture.finalIntensity;
                 lightColorTint = fixture.lightColorTint;
@@ -179,7 +178,6 @@ namespace VRSL.EditorScripts
         public int dmxChannel;
         public int dmxUniverse;
         public int fixtureDefintion;
-        public bool legacyGoboRange;
         public float globalIntensity;
         public float finalIntensity;
         public UnityEngine.Color lightColorTint;
@@ -374,7 +372,6 @@ namespace VRSL.EditorScripts
                             so.FindProperty("fixtureID").intValue = data[dmxID].fixtureID;
                             so.FindProperty("dmxChannel").intValue = data[dmxID].dmxChannel;
                             so.FindProperty("dmxUniverse").intValue = data[dmxID].dmxUniverse;
-                            so.FindProperty("legacyGoboRange").boolValue = data[dmxID].legacyGoboRange;
                             so.FindProperty("globalIntensity").floatValue = data[dmxID].globalIntensity;
                             so.FindProperty("finalIntensity").floatValue = data[dmxID].finalIntensity;
                             so.FindProperty("lightColorTint").colorValue = data[dmxID].lightColorTint;
@@ -417,7 +414,6 @@ namespace VRSL.EditorScripts
                             fixture.fixtureID = data[dmxID].fixtureID;
                             fixture.dmxChannel = data[dmxID].dmxChannel;
                             fixture.dmxUniverse = data[dmxID].dmxUniverse;
-                            fixture.legacyGoboRange = data[dmxID].legacyGoboRange;
                             fixture.globalIntensity = data[dmxID].globalIntensity;
                             fixture.finalIntensity = data[dmxID].finalIntensity;
                             fixture.lightColorTint = data[dmxID].lightColorTint;

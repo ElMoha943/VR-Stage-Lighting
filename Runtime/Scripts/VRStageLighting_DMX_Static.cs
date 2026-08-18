@@ -32,7 +32,6 @@ namespace VRSL
         [Tooltip ("Enables 9-Universe mode for this fixture. The grid will be split up by RGB channels with each section and color representing a universe. Only availble on the Vertical and Horizontal Grid nodes.")]
         public bool nineUniverseMode;
 
-        public bool legacyGoboRange;
         [Space(5)]
         [Header("General Settings")]
         [Range(0,1)]
@@ -222,7 +221,6 @@ namespace VRSL
 
             props.SetInt("_NineUniverseMode", nineUniverseMode == true ? 1 : 0);
             props.SetInt("_PanInvert", invertPan == true ? 1 : 0);
-            props.SetInt("_LegacyGoboRange", legacyGoboRange == true ? 1 : 0);
             props.SetInt("_TiltInvert", invertTilt == true ? 1 : 0);
             props.SetInt("_EnableStrobe", applyDMXProperties && enableStrobe == true ? 1 : 0);
             props.SetInt("_EnableSpin", enableAutoSpin == true ? 1 : 0);

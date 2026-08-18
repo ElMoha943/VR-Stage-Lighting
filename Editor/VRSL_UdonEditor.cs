@@ -146,6 +146,25 @@ namespace VRSL.EditorScripts
 
             return false;
         }
+
+        public static bool AreAllLUTBeamFixtures(UnityEngine.Object[] selectedTargets)
+        {
+            if(selectedTargets == null || selectedTargets.Length == 0)
+            {
+                return false;
+            }
+
+            foreach(UnityEngine.Object selectedTarget in selectedTargets)
+            {
+                VRStageLighting_DMX_Static fixture = selectedTarget as VRStageLighting_DMX_Static;
+                if(!IsLUTBeamFixture(fixture))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 
     [CanEditMultipleObjects]
@@ -317,16 +336,16 @@ namespace VRSL.EditorScripts
             VRStageLighting_DMX_Static fixture = (VRStageLighting_DMX_Static)target;
             //EditorGUIUtility.LookLikeInspector();
             EditorGUI.BeginChangeCheck();
-            bool isLUTBeamFixture = targets.Length == 1 && VRSLFixtureShaderUtility.IsLUTBeamFixture(fixture);
+            bool isLUTBeamFixture = VRSLFixtureShaderUtility.AreAllLUTBeamFixtures(targets);
             if(isLUTBeamFixture)
             {
                 SerializedProperty enableDMX = serializedObject.FindProperty("enableDMXChannels");
-                SerializedProperty legacyGobo = serializedObject.FindProperty("legacyGoboRange");
                 SerializedProperty componentIntensities = serializedObject.FindProperty("finalIntensityComponentMode");
-                if(!enableDMX.boolValue || legacyGobo.boolValue || !componentIntensities.boolValue)
+                bool needsLUTBeamDefaults = enableDMX.hasMultipleDifferentValues || !enableDMX.boolValue ||
+                    componentIntensities.hasMultipleDifferentValues || !componentIntensities.boolValue;
+                if(needsLUTBeamDefaults)
                 {
                     enableDMX.boolValue = true;
-                    legacyGobo.boolValue = false;
                     componentIntensities.boolValue = true;
                     GUI.changed = true;
                 }
@@ -367,11 +386,6 @@ namespace VRSL.EditorScripts
             GUILayout.Label(fixture._DMXChannelToString(), I);
             EditorGUILayout.Space();
             EditorGUILayout.Space();
-            if(!isLUTBeamFixture)
-            {
-                serializedObject.FindProperty("legacyGoboRange").boolValue = EditorGUILayout.Toggle(new GUIContent("Enable Legacy Gobo Range", 
-                "Use Only the first 6 gobos instead of all. This is for legacy content where only 6 gobos were originally supported and the channel range was different."), fixture.legacyGoboRange);
-            }
             EditorGUILayout.Space();
             EditorGUILayout.Space();
             //GENERAL SETTINGS

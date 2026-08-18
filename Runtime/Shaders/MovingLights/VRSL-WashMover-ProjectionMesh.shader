@@ -11,7 +11,6 @@ Shader "VRSL/Wash Mover/Projection"
 		 [Toggle] _EnableVerticalMode ("Enable Vertical Mode", Int) = 0
 		 [Toggle] _EnableStrobe ("Enable Strobe", Int) = 0
 		 [Toggle] _EnableDMX ("Enable Stream DMX/DMX Control", Int) = 0
-		 [Toggle] _LegacyGoboRange ("Enable Legacy GOBO Range", Int) = 0
 		 [HideInInspector]_FixtureBaseRotationY("Mover Pan Offset (Blue + Green)", Range(-540,540)) = 0
 		 [HideInInspector]_FixtureRotationX("Mover Tilt Offset (Blue)", Range(-180,180)) = 0
 		 [HideInInspector]_ProjectionSelection ("GOBO Selection", Range(0,8)) = 0

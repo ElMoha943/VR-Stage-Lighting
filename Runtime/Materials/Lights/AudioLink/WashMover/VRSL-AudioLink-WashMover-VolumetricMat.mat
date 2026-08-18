@@ -180,7 +180,6 @@ Material:
     - _IntersectionMod: 1
     - _IsEven: 0
     - _LMStrength: 1
-    - _LegacyGoboRange: 0
     - _LensMaxBrightness: 1
     - _LightProbeMethod: 0
     - _MAGIC_NOISE_ON: 1

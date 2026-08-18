@@ -2,7 +2,6 @@
 UNITY_INSTANCING_BUFFER_START(Props)
     UNITY_DEFINE_INSTANCED_PROP(uint, _NineUniverseMode)
     UNITY_DEFINE_INSTANCED_PROP(uint, _PanInvert)
-    UNITY_DEFINE_INSTANCED_PROP(uint, _LegacyGoboRange)
     UNITY_DEFINE_INSTANCED_PROP(uint, _TiltInvert)
     UNITY_DEFINE_INSTANCED_PROP(uint, _EnableStrobe)
     UNITY_DEFINE_INSTANCED_PROP(uint, _EnableSpin)
