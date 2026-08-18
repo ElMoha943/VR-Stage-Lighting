@@ -235,6 +235,10 @@ namespace VRSL
             props.SetColor("_EmissionDMX", lightColorTint);
             props.SetFloat("_ConeWidth", coneWidth);
             props.SetFloat("_GlobalIntensity", globalIntensity);
+            props.SetFloat("_LUTBeamFinalIntensityVolumetric",
+                finalIntensityComponentMode ? finalIntensityVolumetric : finalIntensity);
+            props.SetFloat("_LUTBeamFinalIntensityProjection",
+                finalIntensityComponentMode ? finalIntensityProjection : finalIntensity);
             props.SetFloat("_FinalIntensity", finalIntensity);
             props.SetFloat("_ConeLength", Mathf.Abs(coneLength - 10.5f));
             props.SetFloat("_MaxConeLength", maxConeLength);

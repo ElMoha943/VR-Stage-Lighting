@@ -96,6 +96,9 @@ public class DMXListItem
     private bool Z_legacyGoboRange; public bool P_legacyGoboRange;
     private float Z_globalIntensity; public float P_globalIntensity;
     private float Z_finalIntensity; public float P_finalIntensity;
+    private bool Z_finalIntensityComponentMode; public bool P_finalIntensityComponentMode;
+    private float Z_finalIntensityVolumetric; public float P_finalIntensityVolumetric;
+    private float Z_finalIntensityProjection; public float P_finalIntensityProjection;
     private Color Z_lightColorTint; public Color P_lightColorTint;
     private bool Z_invertPan; public bool P_invertPan;
     private bool Z_nineUniverseMode; public bool P_nineUniverseMode;
@@ -126,6 +129,9 @@ public class DMXListItem
         Z_legacyGoboRange = P_legacyGoboRange = this.light.legacyGoboRange;
         Z_globalIntensity = P_globalIntensity = this.light.globalIntensity;
         Z_finalIntensity = P_finalIntensity = this.light.finalIntensity;
+        Z_finalIntensityComponentMode = P_finalIntensityComponentMode = this.light.finalIntensityComponentMode;
+        Z_finalIntensityVolumetric = P_finalIntensityVolumetric = this.light.finalIntensityVolumetric;
+        Z_finalIntensityProjection = P_finalIntensityProjection = this.light.finalIntensityProjection;
         Z_lightColorTint = P_lightColorTint = this.light.lightColorTint;
         Z_invertPan = P_invertPan = this.light.invertPan;
         Z_nineUniverseMode = P_nineUniverseMode = this.light.nineUniverseMode;
@@ -169,6 +175,9 @@ public class DMXListItem
         light.legacyGoboRange = P_legacyGoboRange = Z_legacyGoboRange;
         light.globalIntensity = P_globalIntensity = Z_globalIntensity;
         light.finalIntensity = P_finalIntensity = Z_finalIntensity;
+        light.finalIntensityComponentMode = P_finalIntensityComponentMode = Z_finalIntensityComponentMode;
+        light.finalIntensityVolumetric = P_finalIntensityVolumetric = Z_finalIntensityVolumetric;
+        light.finalIntensityProjection = P_finalIntensityProjection = Z_finalIntensityProjection;
         light.lightColorTint = P_lightColorTint = Z_lightColorTint;
         light.invertPan = P_invertPan = Z_invertPan;
         light.nineUniverseMode = P_nineUniverseMode = Z_nineUniverseMode;
@@ -203,6 +212,9 @@ public class DMXListItem
         so.FindProperty("legacyGoboRange").boolValue = P_legacyGoboRange;
         so.FindProperty("globalIntensity").floatValue = P_globalIntensity;
         so.FindProperty("finalIntensity").floatValue = P_finalIntensity;
+        so.FindProperty("finalIntensityComponentMode").boolValue = P_finalIntensityComponentMode;
+        so.FindProperty("finalIntensityVolumetric").floatValue = P_finalIntensityVolumetric;
+        so.FindProperty("finalIntensityProjection").floatValue = P_finalIntensityProjection;
         so.FindProperty("lightColorTint").colorValue = P_lightColorTint;
         so.FindProperty("nineUniverseMode").boolValue = P_nineUniverseMode;
         so.FindProperty("invertPan").boolValue = P_invertPan;
@@ -232,6 +244,9 @@ public class DMXListItem
         light.legacyGoboRange = Z_legacyGoboRange = P_legacyGoboRange;
         light.globalIntensity = Z_globalIntensity = P_globalIntensity;
         light.finalIntensity = Z_finalIntensity = P_finalIntensity;
+        light.finalIntensityComponentMode = Z_finalIntensityComponentMode = P_finalIntensityComponentMode;
+        light.finalIntensityVolumetric = Z_finalIntensityVolumetric = P_finalIntensityVolumetric;
+        light.finalIntensityProjection = Z_finalIntensityProjection = P_finalIntensityProjection;
         light.lightColorTint = Z_lightColorTint = P_lightColorTint;
         light.nineUniverseMode = Z_nineUniverseMode = P_nineUniverseMode;
         light.invertPan = Z_invertPan = P_invertPan;
@@ -2044,6 +2059,9 @@ public class VRSL_ManagerWindow : EditorWindow {
         copyTofixture.P_enableAutoSpin = copyFromfixture.P_enableAutoSpin;
         copyTofixture.P_enableStrobe = copyFromfixture.P_enableStrobe;
         copyTofixture.P_finalIntensity = copyFromfixture.P_finalIntensity;
+        copyTofixture.P_finalIntensityComponentMode = copyFromfixture.P_finalIntensityComponentMode;
+        copyTofixture.P_finalIntensityVolumetric = copyFromfixture.P_finalIntensityVolumetric;
+        copyTofixture.P_finalIntensityProjection = copyFromfixture.P_finalIntensityProjection;
         copyTofixture.P_globalIntensity = copyFromfixture.P_globalIntensity;
         copyTofixture.P_invertPan = copyFromfixture.P_invertPan;
         copyTofixture.P_invertTilt = copyFromfixture.P_invertTilt;
@@ -3692,20 +3710,41 @@ public class VRSL_ManagerWindow : EditorWindow {
                                 GUILayout.Space(15.0f);
                                 GUILayout.Label("DMX Settings", SecLabel());
                                 GUILayout.Space(8.0f);
-                                fixture.P_enableDMXChannels = EditorGUILayout.Toggle("Enable DMX", fixture.P_enableDMXChannels);
+                                bool isLUTBeamFixture = VRSLFixtureShaderUtility.IsLUTBeamFixture(fixture.light);
+                                if(isLUTBeamFixture)
+                                {
+                                    fixture.P_enableDMXChannels = true;
+                                    fixture.P_legacyGoboRange = false;
+                                    fixture.P_finalIntensityComponentMode = true;
+                                }
+                                else
+                                {
+                                    fixture.P_enableDMXChannels = EditorGUILayout.Toggle("Enable DMX", fixture.P_enableDMXChannels);
+                                }
                                 fixture.P_enableFineChannels = EditorGUILayout.Toggle("Enable Fine Channels", fixture.P_enableFineChannels);
                                 fixture.P_nineUniverseMode = EditorGUILayout.Toggle("Extended Universe Mode", fixture.P_nineUniverseMode);
                                 fixture.P_fixtureID = EditorGUILayout.IntField("Fixture ID", fixture.P_fixtureID, GUILayout.MaxWidth(sectionWidth - 10));
                                 fixture.P_dmxChannel = EditorGUILayout.IntSlider("DMX Channel",fixture.P_dmxChannel, 1, 512, GUILayout.MaxWidth(sectionWidth - 10));
                                 fixture.P_dmxUniverse = EditorGUILayout.IntSlider("Universe",fixture.P_dmxUniverse, 1, 9, GUILayout.MaxWidth(sectionWidth - 10));
-                                fixture.P_legacyGoboRange = EditorGUILayout.Toggle("Legacy Gobo Range",fixture.P_legacyGoboRange);
+                                if(!isLUTBeamFixture)
+                                {
+                                    fixture.P_legacyGoboRange = EditorGUILayout.Toggle("Legacy Gobo Range",fixture.P_legacyGoboRange);
+                                }
                                 GUILayout.Space(4.0f);
 
                                 GUILayout.Space(4.0f);
                                 GUILayout.Label("General Settings", SecLabel());
                                 GUILayout.Space(8.0f);
                                 fixture.P_globalIntensity = EditorGUILayout.Slider("Global Intensity",fixture.P_globalIntensity, 0f, 1f, GUILayout.MaxWidth(sectionWidth - 10));
-                                fixture.P_finalIntensity = EditorGUILayout.Slider("Final Intensity",fixture.P_finalIntensity, 0f, 1f, GUILayout.MaxWidth(sectionWidth - 10));
+                                if(isLUTBeamFixture)
+                                {
+                                    fixture.P_finalIntensityVolumetric = EditorGUILayout.Slider("Volumetric Intensity",fixture.P_finalIntensityVolumetric, 0f, 1f, GUILayout.MaxWidth(sectionWidth - 10));
+                                    fixture.P_finalIntensityProjection = EditorGUILayout.Slider("Projection Intensity",fixture.P_finalIntensityProjection, 0f, 1f, GUILayout.MaxWidth(sectionWidth - 10));
+                                }
+                                else
+                                {
+                                    fixture.P_finalIntensity = EditorGUILayout.Slider("Final Intensity",fixture.P_finalIntensity, 0f, 1f, GUILayout.MaxWidth(sectionWidth - 10));
+                                }
                                 fixture.P_lightColorTint = EditorGUILayout.ColorField(colorLabel,fixture.P_lightColorTint, true,true,true, GUILayout.MaxWidth(sectionWidth - 10));
                                 GUILayout.Space(4.0f);
                                 GUILayout.Label("Movement Settings", SecLabel());
@@ -3730,7 +3769,10 @@ public class VRSL_ManagerWindow : EditorWindow {
                                 GUILayout.Space(8.0f);
                                 fixture.P_coneWidth = EditorGUILayout.Slider("Cone Width",fixture.P_coneWidth, 0f, 5.5f, GUILayout.MaxWidth(sectionWidth - 10));
                                 fixture.P_coneLength = EditorGUILayout.Slider("Cone Length",fixture.P_coneLength, 0.5f, 10.0f, GUILayout.MaxWidth(sectionWidth - 10));
-                                fixture.P_maxConeLength = EditorGUILayout.Slider("Max Cone Length",fixture.P_maxConeLength, 0.275f, 10.0f, GUILayout.MaxWidth(sectionWidth - 10));
+                                if(!isLUTBeamFixture)
+                                {
+                                    fixture.P_maxConeLength = EditorGUILayout.Slider("Max Cone Length",fixture.P_maxConeLength, 0.275f, 10.0f, GUILayout.MaxWidth(sectionWidth - 10));
+                                }
                                 GUILayout.Space(15.0f);
 
                                 EditorGUILayout.EndVertical();

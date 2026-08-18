@@ -116,6 +116,38 @@ namespace VRSL.EditorScripts
     #endif
 
     #if UNITY_EDITOR && !COMPILER_UDONSHARP
+    internal static class VRSLFixtureShaderUtility
+    {
+        private const string LUTBeamDMXShaderName = "LUTBeam/VVRSL DMX 13CH";
+
+        public static bool IsLUTBeamFixture(VRStageLighting_DMX_Static fixture)
+        {
+            if(fixture == null || fixture.objRenderers == null)
+            {
+                return false;
+            }
+
+            foreach(MeshRenderer renderer in fixture.objRenderers)
+            {
+                if(renderer == null)
+                {
+                    continue;
+                }
+
+                Material[] materials = renderer.sharedMaterials;
+                foreach(Material material in materials)
+                {
+                    if(material != null && material.shader != null && material.shader.name == LUTBeamDMXShaderName)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
+
     [CanEditMultipleObjects]
     public abstract class VRSL_FixtureUdonEditor<TFixture> : VRSL_UdonEditor
         where TFixture : UnityEngine.Object
@@ -285,12 +317,29 @@ namespace VRSL.EditorScripts
             VRStageLighting_DMX_Static fixture = (VRStageLighting_DMX_Static)target;
             //EditorGUIUtility.LookLikeInspector();
             EditorGUI.BeginChangeCheck();
+            bool isLUTBeamFixture = targets.Length == 1 && VRSLFixtureShaderUtility.IsLUTBeamFixture(fixture);
+            if(isLUTBeamFixture)
+            {
+                SerializedProperty enableDMX = serializedObject.FindProperty("enableDMXChannels");
+                SerializedProperty legacyGobo = serializedObject.FindProperty("legacyGoboRange");
+                SerializedProperty componentIntensities = serializedObject.FindProperty("finalIntensityComponentMode");
+                if(!enableDMX.boolValue || legacyGobo.boolValue || !componentIntensities.boolValue)
+                {
+                    enableDMX.boolValue = true;
+                    legacyGobo.boolValue = false;
+                    componentIntensities.boolValue = true;
+                    GUI.changed = true;
+                }
+            }
             //base.OnInspectorGUI();
 
             //DMX SETTINGS SECTION
             GUILayout.Label("DMX Settings", l);
-            serializedObject.FindProperty("enableDMXChannels").boolValue = EditorGUILayout.Toggle(new GUIContent("Enable DMX", 
-            "The industry standard DMX Channel this fixture begins on. Most standard VRSL fixtures are 13 channels"), fixture.enableDMXChannels);
+            if(!isLUTBeamFixture)
+            {
+                serializedObject.FindProperty("enableDMXChannels").boolValue = EditorGUILayout.Toggle(new GUIContent("Enable DMX", 
+                "The industry standard DMX Channel this fixture begins on. Most standard VRSL fixtures are 13 channels"), fixture.enableDMXChannels);
+            }
             if(serializedObject.FindProperty("enableDMXChannels").boolValue && panel != null)
             {
                 EditorGUI.indentLevel++;
@@ -318,32 +367,45 @@ namespace VRSL.EditorScripts
             GUILayout.Label(fixture._DMXChannelToString(), I);
             EditorGUILayout.Space();
             EditorGUILayout.Space();
-            serializedObject.FindProperty("legacyGoboRange").boolValue = EditorGUILayout.Toggle(new GUIContent("Enable Legacy Gobo Range", 
-            "Use Only the first 6 gobos instead of all. This is for legacy content where only 6 gobos were originally supported and the channel range was different."), fixture.legacyGoboRange);
+            if(!isLUTBeamFixture)
+            {
+                serializedObject.FindProperty("legacyGoboRange").boolValue = EditorGUILayout.Toggle(new GUIContent("Enable Legacy Gobo Range", 
+                "Use Only the first 6 gobos instead of all. This is for legacy content where only 6 gobos were originally supported and the channel range was different."), fixture.legacyGoboRange);
+            }
             EditorGUILayout.Space();
             EditorGUILayout.Space();
             //GENERAL SETTINGS
             GUILayout.Label("General Settings", l);
             serializedObject.FindProperty("globalIntensity").floatValue = EditorGUILayout.Slider(new GUIContent("Global Intensity",
             "Sets the overall intensity of the shader. Good for animating or scripting effects related to intensity. Its max value is controlled by Final Intensity."), fixture.globalIntensity, 0.0f, 1.0f);
-            EditorGUILayout.PropertyField( serializedObject.FindProperty("finalIntensityComponentMode"), new GUIContent("Control Component Intensities"));
-            EditorGUI.indentLevel++;
-            if(serializedObject.FindProperty("finalIntensityComponentMode").boolValue){
-
+            if(isLUTBeamFixture)
+            {
                 serializedObject.FindProperty("finalIntensityVolumetric").floatValue  = EditorGUILayout.Slider(new GUIContent("Volumetric Intensity",
-                "Sets the maximum brightness value of Global Intensity for volumetric meshes only. Good for personalized settings of the max brightness of the shader by other users via UI."), fixture.finalIntensityVolumetric, 0.0f, 1.0f);
-                
+                "Scales LUTBeam's Maximum Beam Intensity."), fixture.finalIntensityVolumetric, 0.0f, 1.0f);
                 serializedObject.FindProperty("finalIntensityProjection").floatValue  = EditorGUILayout.Slider(new GUIContent("Projection Intensity",
-                "Sets the maximum brightness value of Global Intensity for projection meshes only. Good for personalized settings of the max brightness of the shader by other users via UI."), fixture.finalIntensityProjection, 0.0f, 1.0f);
+                "Scales LUTBeam's Maximum Gobo Intensity."), fixture.finalIntensityProjection, 0.0f, 1.0f);
+            }
+            else
+            {
+                EditorGUILayout.PropertyField( serializedObject.FindProperty("finalIntensityComponentMode"), new GUIContent("Control Component Intensities"));
+                EditorGUI.indentLevel++;
+                if(serializedObject.FindProperty("finalIntensityComponentMode").boolValue){
 
-                serializedObject.FindProperty("finalIntensityFixture").floatValue  = EditorGUILayout.Slider(new GUIContent("Fixture/Other Intensity",
-                "Sets the maximum brightness value of Global Intensity for everything else. Good for personalized settings of the max brightness of the shader by other users via UI."), fixture.finalIntensityFixture, 0.0f, 1.0f);
+                    serializedObject.FindProperty("finalIntensityVolumetric").floatValue  = EditorGUILayout.Slider(new GUIContent("Volumetric Intensity",
+                    "Sets the maximum brightness value of Global Intensity for volumetric meshes only. Good for personalized settings of the max brightness of the shader by other users via UI."), fixture.finalIntensityVolumetric, 0.0f, 1.0f);
+                    
+                    serializedObject.FindProperty("finalIntensityProjection").floatValue  = EditorGUILayout.Slider(new GUIContent("Projection Intensity",
+                    "Sets the maximum brightness value of Global Intensity for projection meshes only. Good for personalized settings of the max brightness of the shader by other users via UI."), fixture.finalIntensityProjection, 0.0f, 1.0f);
+
+                    serializedObject.FindProperty("finalIntensityFixture").floatValue  = EditorGUILayout.Slider(new GUIContent("Fixture/Other Intensity",
+                    "Sets the maximum brightness value of Global Intensity for everything else. Good for personalized settings of the max brightness of the shader by other users via UI."), fixture.finalIntensityFixture, 0.0f, 1.0f);
+                }
+                else{
+                    serializedObject.FindProperty("finalIntensity").floatValue  = EditorGUILayout.Slider(new GUIContent("Final Intensity",
+                    "Sets the maximum brightness value of Global Intensity. Good for personalized settings of the max brightness of the shader by other users via UI."), fixture.finalIntensity, 0.0f, 1.0f);
+                }
+                EditorGUI.indentLevel--;
             }
-            else{
-                serializedObject.FindProperty("finalIntensity").floatValue  = EditorGUILayout.Slider(new GUIContent("Final Intensity",
-                "Sets the maximum brightness value of Global Intensity. Good for personalized settings of the max brightness of the shader by other users via UI."), fixture.finalIntensity, 0.0f, 1.0f);
-            }
-            EditorGUI.indentLevel--;
             serializedObject.FindProperty("lightColorTint").colorValue = EditorGUILayout.ColorField(colorLabel, fixture.lightColorTint, true, true, true);
             EditorGUILayout.Space();
             EditorGUILayout.Space();
@@ -381,7 +443,10 @@ namespace VRSL.EditorScripts
             "Controls the radius of a mover/spot light."), fixture.coneWidth, 0.0f, 5.5f);
             serializedObject.FindProperty("coneLength").floatValue = EditorGUILayout.Slider(new GUIContent("Fixture Cone Length",
             "Controls the length of the cone of a mover/spot light."), fixture.coneLength, 0.5f, 10.0f);
-            serializedObject.FindProperty("maxConeLength").floatValue = EditorGUILayout.Slider("Max Cone Length", fixture.maxConeLength, 0.275f, 10.0f);
+            if(!isLUTBeamFixture)
+            {
+                serializedObject.FindProperty("maxConeLength").floatValue = EditorGUILayout.Slider("Max Cone Length", fixture.maxConeLength, 0.275f, 10.0f);
+            }
             
             SerializedProperty meshRends = serializedObject.FindProperty("objRenderers");
             EditorGUILayout.PropertyField(meshRends, true);
